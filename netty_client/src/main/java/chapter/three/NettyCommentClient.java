@@ -54,12 +54,6 @@ public class NettyCommentClient {
                             ch.pipeline().addLast(new SimpleChannelInboundHandler<ByteBuf>() {
 
                                 @Override
-                                public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-                                    cause.printStackTrace();
-                                    ctx.close();
-                                }
-
-                                @Override
                                 public void channelActive(ChannelHandlerContext ctx) {
                                     System.out.println("client channelActive.......4");
                                     ctx.writeAndFlush(Unpooled.copiedBuffer("Netty rocks!", CharsetUtil.UTF_8));
@@ -70,6 +64,12 @@ public class NettyCommentClient {
                                     System.out.println("client channelRead......");
                                     ByteBuf buf = msg.readBytes(msg.readableBytes());
                                     System.out.println("Client received: " + ByteBufUtil.hexDump(buf) + "; The value is: " + buf.toString(CharsetUtil.UTF_8));
+                                }
+
+                                @Override
+                                public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+                                    cause.printStackTrace();
+                                    ctx.close();
                                 }
                             }).addLast(new StringEncoder(CharsetUtil.UTF_8)).addLast(new StringDecoder(Charset.forName("GBK")));
                         }
