@@ -46,13 +46,13 @@ public class NettyNioServer {
                                 }
 
                                 @Override
-                                public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+                                public void channelRead(ChannelHandlerContext ctx, Object msg) {
                                     System.out.println("server channelRead.....;received: " + msg);
                                     ctx.write(msg);
                                 }
 
                                 @Override
-                                public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+                                public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
                                     System.out.println("server occur exception:" + cause.getMessage());
                                     cause.printStackTrace();
                                     ctx.close();
