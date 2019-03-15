@@ -40,6 +40,7 @@ public class NettyNioServer {
 
                                 @Override
                                 public void channelActive(ChannelHandlerContext ctx) {
+                                    System.out.println("server channelReadComplete....");
                                     // 将消息写到客户端，并添加ChannelFutureListener， 以便消息一被写完就关闭连接
                                     ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
                                 }
@@ -47,7 +48,7 @@ public class NettyNioServer {
                                 @Override
                                 public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                                     System.out.println("server channelRead.....;received: " + msg);
-                                    ctx.writeAndFlush(msg);
+                                    ctx.write(msg);
                                 }
 
                                 @Override
@@ -61,6 +62,7 @@ public class NettyNioServer {
                     });
             // 绑定服务器以接受连接
             ChannelFuture f = b.bind().sync();
+            System.out.println(NettyNioServer.class + " started and listen on " + f.channel().localAddress());
             f.channel().closeFuture().sync();
         } finally {
             // 释放所有资源
