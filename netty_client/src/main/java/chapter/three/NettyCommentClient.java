@@ -1,20 +1,14 @@
 package chapter.three;
 
-import chapter.two.EchoClientHandler;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
-import io.netty.util.CharsetUtil;
 
 import java.net.InetSocketAddress;
-import java.nio.charset.Charset;
 
 /**
  * 请求连接服务器的客户端
@@ -51,27 +45,7 @@ public class NettyCommentClient {
                         @Override
                         protected void initChannel(SocketChannel ch) {
                             System.out.println("connected.......2");
-                            ch.pipeline().addLast(new SimpleChannelInboundHandler<ByteBuf>() {
-
-                                @Override
-                                public void channelActive(ChannelHandlerContext ctx) {
-                                    System.out.println("client channelActive.......4");
-                                    ctx.writeAndFlush(Unpooled.copiedBuffer("Netty rocks!", CharsetUtil.UTF_8));
-                                }
-
-                                @Override
-                                protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) {
-                                    System.out.println("client channelRead......");
-                                    ByteBuf buf = msg.readBytes(msg.readableBytes());
-                                    System.out.println("Client received: " + ByteBufUtil.hexDump(buf) + "; The value is: " + buf.toString(CharsetUtil.UTF_8));
-                                }
-
-                                @Override
-                                public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-                                    cause.printStackTrace();
-                                    ctx.close();
-                                }
-                            }).addLast(new StringEncoder(CharsetUtil.UTF_8)).addLast(new StringDecoder(Charset.forName("GBK")));
+                            ch.pipeline().addLast(new EchoClientHandler());
                         }
                     });
             System.out.println("created.......1");
