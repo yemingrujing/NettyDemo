@@ -26,6 +26,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
         try {
             String path = location.toURI() + "index.html";
             path = !path.contains("file:") ? path : path.substring(5);
+            System.out.println(path);
             INDEX = new File(path);
         } catch (URISyntaxException e) {
             throw new IllegalStateException("Unable to locate index.html", e);
@@ -57,7 +58,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
                 response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
             }
             // 将 HttpResponse写到客户端
-            ctx.writeAndFlush(response);
+            ctx.write(response);
             // 将 index.html写到客户端
             if (ctx.pipeline().get(SslHandler.class) == null) {
                 ctx.write(new DefaultFileRegion(file.getChannel(), 0, file.length()));
