@@ -25,10 +25,9 @@ public class ChatServerInitializer extends ChannelInitializer<Channel> {
     /**
      * 将所有需要的ChannelHandler 添加到 ChannelPipeline 中
      * @param ch
-     * @throws Exception
      */
     @Override
-    protected void initChannel(Channel ch) throws Exception {
+    protected void initChannel(Channel ch) {
         ch.pipeline()
                 .addLast(new HttpServerCodec())
                 .addLast(new ChunkedWriteHandler())
