@@ -43,6 +43,7 @@
                             log('Response : ' + d.data)
                         }
                         $('#send').click(function () {
+                            debugger;
                             var msg = $('#msg').val()
                             $('#msg').val('')
                             if (ws.send(msg)) {
